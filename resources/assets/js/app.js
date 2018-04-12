@@ -16,20 +16,17 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-   Vue.component('chat-messages', require('./components/ChatMessages.vue').default);
+ Vue.component('chat-messages', require('./components/ChatMessages.vue').default);
  Vue.component('chat-form', require('./components/ChatForm.vue').default);
-
-
-// Vue.component('chat-messages', {
-//     template: '<div v-for="item in messages"> @{{ item.user.name }}</div>'
-// });
 
  const app = new Vue({
 
      el: '#app',
 
      data: {
-         messages: []
+         messages: [],
+         current_id:0,
+         count:0
      },
 
     created() {
@@ -39,7 +36,10 @@ require('./bootstrap');
     methods: {
         fetchMessages() {
             axios.get('/messages').then(response => {
-                this.messages = response.data;
+                this.messages = response.data.users;
+
+                this.current_id = response.data.current_id;
+                this.count = response.data.count;
         });
             Echo.private('chat')
                 .listen('MessageSent', (e) => {
@@ -52,7 +52,7 @@ require('./bootstrap');
 
         addMessage(message) {
             this.messages.push(message);
-
+            console.log(message);
             axios.post('/messages', message).then(response => {
                 console.log(response.data);
         });

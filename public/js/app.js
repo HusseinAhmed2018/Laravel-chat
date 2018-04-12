@@ -11427,9 +11427,10 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    props: ['messages']
+    props: ['messages', 'current_id', 'count']
 });
 
 /***/ }),
@@ -11437,7 +11438,6 @@ module.exports = function normalizeComponent (
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-//
 //
 //
 //
@@ -11461,9 +11461,12 @@ module.exports = function normalizeComponent (
 
 
     methods: {
-        sendMessage: function sendMessage() {
+        sendMessage: function sendMessage(user_id) {
+            this.user_id = user_id;
+            console.log(this.user_id);
             this.$emit('messagesent', {
                 user: this.user,
+                user_id: this.user_id,
                 message: this.newMessage
             });
 
@@ -11503,16 +11506,14 @@ __webpack_require__(14);
 Vue.component('chat-messages', __webpack_require__(39).default);
 Vue.component('chat-form', __webpack_require__(41).default);
 
-// Vue.component('chat-messages', {
-//     template: '<div v-for="item in messages"> @{{ item.user.name }}</div>'
-// });
-
 var app = new Vue({
 
     el: '#app',
 
     data: {
-        messages: []
+        messages: [],
+        current_id: 0,
+        count: 0
     },
 
     created: function created() {
@@ -11525,7 +11526,10 @@ var app = new Vue({
             var _this = this;
 
             axios.get('/messages').then(function (response) {
-                _this.messages = response.data;
+                _this.messages = response.data.users;
+
+                _this.current_id = response.data.current_id;
+                _this.count = response.data.count;
             });
             Echo.private('chat').listen('MessageSent', function (e) {
                 _this.messages.push({
@@ -11536,7 +11540,7 @@ var app = new Vue({
         },
         addMessage: function addMessage(message) {
             this.messages.push(message);
-
+            console.log(message);
             axios.post('/messages', message).then(function (response) {
                 console.log(response.data);
             });
@@ -37047,23 +37051,42 @@ var render = function() {
     { staticClass: "chat" },
     _vm._l(_vm.messages, function(message) {
       return _c("li", { staticClass: "left clearfix" }, [
-        _c("div", { staticClass: "chat-body clearfix" }, [
-          _c("div", { staticClass: "header" }, [
-            _c("strong", { staticClass: "primary-font" }, [
+        _c(
+          "div",
+          {
+            staticClass: "chat-body clearfix",
+            class: { "pull-right": _vm.current_id == message.user.id }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "header",
+                class: {
+                  "text-right text-success": _vm.current_id == message.user.id,
+                  "text-danger": _vm.current_id != message.user.id
+                }
+              },
+              [
+                _c("strong", { staticClass: "primary-font" }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(message.user.name) +
+                      "\n                "
+                  )
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", [
               _vm._v(
-                "\n                    " +
-                  _vm._s(message.user.name) +
-                  "\n                "
+                "\n                " +
+                  _vm._s(message.message) +
+                  "\n            "
               )
             ])
-          ]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v(
-              "\n                " + _vm._s(message.message) + "\n            "
-            )
-          ])
-        ])
+          ]
+        )
       ])
     })
   )
@@ -37167,7 +37190,7 @@ var render = function() {
           ) {
             return null
           }
-          return _vm.sendMessage($event)
+          _vm.sendMessage(2)
         },
         input: function($event) {
           if ($event.target.composing) {
@@ -37184,7 +37207,11 @@ var render = function() {
         {
           staticClass: "btn btn-primary btn-sm",
           attrs: { id: "btn-chat" },
-          on: { click: _vm.sendMessage }
+          on: {
+            click: function($event) {
+              _vm.sendMessage(2)
+            }
+          }
         },
         [_vm._v("\n            Send\n        ")]
       )

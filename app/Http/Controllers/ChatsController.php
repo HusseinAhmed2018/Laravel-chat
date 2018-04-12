@@ -32,7 +32,12 @@ class ChatsController extends Controller
      */
     public function fetchMessages()
     {
-        return Message::with('user')->get();
+        $message = Message::with('user')->get();
+        $count = $message->count();
+        $id = Auth::id();
+        $all = $message;
+
+        return response()->json(['current_id'=>$id,'count'=> $count,'users'=>$all]);
     }
 
     /**
@@ -46,7 +51,8 @@ class ChatsController extends Controller
         $user = Auth::user();
 
         $message = $user->messages()->create([
-            'message' => $request->input('message')
+            'message' => $request->input('message'),
+            'recived_id'    => $request->input('user_id')
         ]);
 
         broadcast(new MessageSent($user, $message))->toOthers();
