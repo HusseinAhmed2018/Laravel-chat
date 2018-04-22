@@ -19,6 +19,6 @@
 <script>
 
     export default {
-        props: ['messages','current_id','count','emoji']
+        props: ['messages','current_id','count','emoji'],
     };
 </script>

@@ -20,7 +20,9 @@ require('./bootstrap');
  Vue.component('chat-form', require('./components/ChatForm.vue').default);
  Vue.component('user-list', require('./components/userlist.vue').default);
 
- const app = new Vue({
+ import user from './components/userlist.vue';
+
+const app = new Vue({
 
      el: '#app',
 
@@ -30,7 +32,7 @@ require('./bootstrap');
          count:0,
          emoji:0,
          users:[],
-         send_id:0
+         send_id:  user.data
      },
 
     created() {
@@ -42,7 +44,8 @@ require('./bootstrap');
     methods: {
 
         fetchMessages() {
-            axios.get('/messages/' + 2).then(response => {
+            axios.get('/messages/' + this.send_id.id).then(response => {
+                console.log(this.send_id.id);
                 this.messages = response.data.users;
                 this.emoji = response.data.emoji;
                 this.current_id = response.data.current_id;

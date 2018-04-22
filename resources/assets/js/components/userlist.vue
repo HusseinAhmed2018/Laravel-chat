@@ -12,16 +12,13 @@
     export default {
         props: ['users', 'current_id'],
 
-        data() {
-            return {
-                id: ''
-            }
+        data: {
+            id: 2,
         },
 
         methods: {
             showid(id){
                 this.id = id;
-
                 console.log(this.id);
             }
         }
