@@ -17,7 +17,8 @@
 </template>
 
 <script>
+
     export default {
-        props: ['messages','current_id','count']
+        props: ['messages','current_id','count','emoji']
     };
 </script>

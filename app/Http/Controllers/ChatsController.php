@@ -30,14 +30,16 @@ class ChatsController extends Controller
      *
      * @return Message
      */
-    public function fetchMessages()
+    public function fetchMessages($id)
     {
-        $message = Message::with('user')->get();
+        $id = $id ;
+        $message = Message::with('user')->where('recived_id', $id)->get();
         $count = $message->count();
         $id = Auth::id();
         $all = $message;
+        $emoji = ':smile:';
 
-        return response()->json(['current_id'=>$id,'count'=> $count,'users'=>$all]);
+        return response()->json(['current_id'=>$id,'count'=> $count,'emoji'=>$emoji,'users'=>$all]);
     }
 
     /**
@@ -46,13 +48,14 @@ class ChatsController extends Controller
      * @param  Request $request
      * @return Response
      */
-    public function sendMessage(Request $request)
+    public function sendMessage(Request $request, $id)
     {
         $user = Auth::user();
+        $recived_id = $id;
 
         $message = $user->messages()->create([
             'message' => $request->input('message'),
-            'recived_id'    => $request->input('user_id')
+            'recived_id'    => $recived_id
         ]);
 
         broadcast(new MessageSent($user, $message))->toOthers();

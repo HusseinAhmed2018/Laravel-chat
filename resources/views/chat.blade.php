@@ -12,17 +12,22 @@
 @section('content')
 
     <div class="container" >
+        @emojione(':smile: ❤️')
+        <hr>
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
+            <div class="col-md-12 col-lg-12 col-xs-12">
+                <div class="col-md-6 panel panel-default">
                     <div class="panel-heading">Chats</div>
 
                     <div class="panel-body">
-                        <chat-messages :messages="messages" :current_id="current_id" :count="count"></chat-messages>
+                        <chat-messages :messages="messages" :current_id="current_id" :count="count" :emoji="emoji"></chat-messages>
                     </div>
                     <div class="panel-footer">
                         <chat-form v-on:messagesent="addMessage" :user="{{ Auth::user() }}"></chat-form>
                     </div>
+                </div>
+                <div class="col-md-6">
+                    <user-list :users = "users" :current_id="current_id"></user-list>
                 </div>
             </div>
         </div>

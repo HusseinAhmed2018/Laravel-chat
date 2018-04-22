@@ -18,6 +18,7 @@ require('./bootstrap');
 
  Vue.component('chat-messages', require('./components/ChatMessages.vue').default);
  Vue.component('chat-form', require('./components/ChatForm.vue').default);
+ Vue.component('user-list', require('./components/userlist.vue').default);
 
  const app = new Vue({
 
@@ -26,18 +27,24 @@ require('./bootstrap');
      data: {
          messages: [],
          current_id:0,
-         count:0
+         count:0,
+         emoji:0,
+         users:[],
+         send_id:0
      },
 
     created() {
         this.fetchMessages();
+        this.allUsers();
+
     },
 
     methods: {
-        fetchMessages() {
-            axios.get('/messages').then(response => {
-                this.messages = response.data.users;
 
+        fetchMessages() {
+            axios.get('/messages/' + 2).then(response => {
+                this.messages = response.data.users;
+                this.emoji = response.data.emoji;
                 this.current_id = response.data.current_id;
                 this.count = response.data.count;
         });
@@ -53,9 +60,17 @@ require('./bootstrap');
         addMessage(message) {
             this.messages.push(message);
             console.log(message);
-            axios.post('/messages', message).then(response => {
+            axios.post('/messages/' + 2, message).then(response => {
                 console.log(response.data);
         });
+        },
+
+        allUsers(){
+            axios.get('/user').then(response => {
+                this.users = response.data.users;
+
+            });
         }
+
     }
    });
