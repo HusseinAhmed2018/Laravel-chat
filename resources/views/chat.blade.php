@@ -20,7 +20,7 @@
                     <div class="panel-heading">Chats</div>
 
                     <div class="panel-body">
-                        <chat-messages :messages="messages" :current_id="current_id" :count="count" :emoji="emoji"></chat-messages>
+                        <chat-messages :messages="messages" :current_id="current_id" :count="count" :emoji="emoji" :users = "users"></chat-messages>
                     </div>
                     <div class="panel-footer">
                         <chat-form v-on:messagesent="addMessage" :user="{{ Auth::user() }}"></chat-form>

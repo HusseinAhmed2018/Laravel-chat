@@ -4,12 +4,11 @@
             <div class="chat-body clearfix" :class="{'pull-right':current_id == message.user.id}">
                 <div class="header" :class="{'text-right text-success':current_id == message.user.id, 'text-danger' : current_id != message.user.id, }">
 
-                    <strong class="primary-font">
-                        {{ message.user.name }}
+                    <strong class="primary-font" v-html=" message.user.name">
+
                     </strong>
                 </div>
-                <div>
-                    {{ message.message }}
+                <div v-html="message.message">
                 </div>
             </div>
         </li>

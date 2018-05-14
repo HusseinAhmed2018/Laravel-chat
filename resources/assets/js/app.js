@@ -16,9 +16,12 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
- Vue.component('chat-messages', require('./components/ChatMessages.vue').default);
- Vue.component('chat-form', require('./components/ChatForm.vue').default);
- Vue.component('user-list', require('./components/userlist.vue').default);
+ // Vue.component('chat-messages', require('./components/ChatMessages.vue').default);
+ // Vue.component('chat-form', require('./components/ChatForm.vue').default);
+ // Vue.component('user-list', require('./components/userlist.vue').default);
+Vue.component('chat-messages', require('./components/ChatMessages.vue'));
+Vue.component('chat-form', require('./components/ChatForm.vue'));
+Vue.component('user-list', require('./components/userlist.vue'));
 
  const app = new Vue({
 
@@ -42,7 +45,7 @@ require('./bootstrap');
     methods: {
 
         fetchMessages() {
-            axios.get('/messages/' + 2).then(response => {
+            axios.get('/messages/' + 3).then(response => {
                 this.messages = response.data.users;
                 this.emoji = response.data.emoji;
                 this.current_id = response.data.current_id;
@@ -60,7 +63,7 @@ require('./bootstrap');
         addMessage(message) {
             this.messages.push(message);
             console.log(message);
-            axios.post('/messages/' + 2, message).then(response => {
+            axios.post('/messages/' + 1, message).then(response => {
                 console.log(response.data);
         });
         },

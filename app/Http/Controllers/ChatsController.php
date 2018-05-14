@@ -26,6 +26,16 @@ class ChatsController extends Controller
     }
 
     /**
+     * Show Users list
+     *
+     * @return \Users
+     */
+    public function home()
+    {
+        return view('Users');
+    }
+
+    /**
      * Fetch all messages
      *
      * @return Message

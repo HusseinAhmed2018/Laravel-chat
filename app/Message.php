@@ -2,6 +2,7 @@
 
 namespace App;
 
+use LaravelEmojiOne;
 use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
@@ -16,5 +17,10 @@ class Message extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public  function getMessageAttribute()
+    {
+        return LaravelEmojiOne::toImage($this->attributes['message']);
     }
 }
